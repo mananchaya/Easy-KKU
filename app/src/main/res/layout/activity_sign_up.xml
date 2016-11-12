@@ -60,7 +60,7 @@
                 android:layout_margin="5dp"
                 android:hint="Name:"
                 android:textColor="@color/aText"
-                android:textColorHint="@color/colorPrimaryDark" />
+                android:textColorHint="@color/colorPrimary" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -71,7 +71,7 @@
                 android:layout_margin="5dp"
                 android:hint="Phone:"
                 android:textColor="@color/aText"
-                android:textColorHint="@color/colorPrimaryDark" />
+                android:textColorHint="@color/colorPrimary" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -82,7 +82,7 @@
                 android:layout_margin="5dp"
                 android:hint="User:"
                 android:textColor="@color/aText"
-                android:textColorHint="@color/colorPrimaryDark" />
+                android:textColorHint="@color/colorPrimary" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -93,7 +93,7 @@
                 android:layout_margin="5dp"
                 android:hint="Password:"
                 android:textColor="@color/aText"
-                android:textColorHint="@color/colorPrimaryDark" />
+                android:textColorHint="@color/colorPrimary" />
 
         </LinearLayout>
     </LinearLayout>
