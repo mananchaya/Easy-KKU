@@ -32,6 +32,7 @@ public class SignUpActivity extends AppCompatActivity {
     private String nameString, phoneString, userString, passwordString,
                     imagePathString, imageNameString;
     private Uri uri;
+    private boolean aBoolean = true;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -72,6 +73,14 @@ public class SignUpActivity extends AppCompatActivity {
                     MyAlert myAlert = new MyAlert(SignUpActivity.this, R.drawable.kon48,
                             "มีช่องว่าง", "กรุณากรอกให้ครบทุกช่อง");
                     myAlert.myDialog();
+                } else if (aBoolean) {
+                    //Non Choose Image
+                    MyAlert myAlert = new MyAlert(SignUpActivity.this, R.drawable.nobita48,
+                            "ยังไม่เลือกรูป", "กรุณาเลือกรูปด้วยนะคะ");
+                    myAlert.myDialog();
+                } else {
+                    //Choose Image OK
+                    uploadImageToServer();
                 }
             } //onClick
         });
@@ -94,12 +103,17 @@ public class SignUpActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }// Main Method
 
+    private void uploadImageToServer() {
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if ((requestCode == 0) && (resultCode == RESULT_OK)) {
             Log.d("12novV1", "Result OK");
+            aBoolean = false;
+
             //Show image
             uri = data.getData();
             try {
@@ -114,6 +128,10 @@ public class SignUpActivity extends AppCompatActivity {
             //Find Paht of Image
             imagePathString = myFindPath(uri);
             Log.d("12novV1", "imagePath ==>" + imagePathString);
+
+            //Find Mane of Image
+            imageNameString = imagePathString.substring(imagePathString.lastIndexOf("/"));
+            Log.d("12novV1", "imageName ==>" + imageNameString);
 
         } // if
 
