@@ -1,5 +1,6 @@
 package cskku.amornpalang.mananchaya.easykku;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,14 +55,35 @@ public class SignUpActivity extends AppCompatActivity {
                             "มีช่องว่าง", "กรุณากรอกให้ครบทุกช่อง");
                     myAlert.myDialog();
                 }
-
-
             } //onClick
+        });
+
+        //Image Controller
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent ย้ายการทำงานจากอีกหน้าไป อีกหน้าหนึ่ง
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*"); //เปิดโปรแกรมทุกโปรแกรมที่สามารถเปิดดูรูปภาพได้
+                startActivityForResult(Intent.createChooser(intent,"โปรเลือกแอปดูภาพ"),0);
+                // 0 ค่าของตัว request รูปภาพ
+            } // onClick
         });
 
 
 
     }// Main Method
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if ((requestCode == 0)&&(resultCode == RESULT_OK)){
+            Log.d("12novV1", "Result OK");
+
+
+        } // if
+
+
+    }// onActivity
 } //Main class
