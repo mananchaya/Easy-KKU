@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -44,7 +45,7 @@ public class SignUpActivity extends AppCompatActivity {
                     imagePathString, imageNameString;
     private Uri uri;
     private boolean aBoolean = true;
-    private String urlAddUser = "http://swiftcodingthai.com/kku/add_user_manan.php";
+    private String urlAddUser = "http://swiftcodingthai.com/kku/add_user_master.php";
     private String urlImage = "http://swiftcodingthai.com/kku/Image";
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -164,6 +165,12 @@ public class SignUpActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.d("13novV1", "Result ==>" + s);
+            if (Boolean.parseBoolean(s)) {
+                Toast.makeText(context,"Upload Success",Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                Toast.makeText(context,"Cannot Upload Success",Toast.LENGTH_SHORT).show();
+            }
 
 
         } //onPost
