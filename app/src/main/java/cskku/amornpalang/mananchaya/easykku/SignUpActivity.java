@@ -1,10 +1,12 @@
 package cskku.amornpalang.mananchaya.easykku;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +21,11 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 
 import org.jibble.simpleftp.SimpleFTP;
 
@@ -37,6 +44,8 @@ public class SignUpActivity extends AppCompatActivity {
                     imagePathString, imageNameString;
     private Uri uri;
     private boolean aBoolean = true;
+    private String urlAddUser = "http://swiftcodingthai.com/kku/add_user_manan.php";
+    private String urlImage = "http://swiftcodingthai.com/kku/Image";
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -85,6 +94,7 @@ public class SignUpActivity extends AppCompatActivity {
                 } else {
                     //Choose Image OK
                     uploadImageToServer();
+                    uploadStringToServer();
                 }
             } //onClick
         });
@@ -106,6 +116,60 @@ public class SignUpActivity extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }// Main Method
+
+    private void uploadStringToServer() {
+        AddNewUser addNewUser = new AddNewUser(SignUpActivity.this);
+        addNewUser.execute(urlAddUser);
+
+    } // upload String
+
+    // Create Inner Class
+    private class AddNewUser extends AsyncTask<String, Void, String> {
+        //Explicit
+        private Context context;
+
+        public AddNewUser(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+
+                OkHttpClient okHttpClient = new OkHttpClient();
+                // RequestBody การมัดสตริงเป็นก้อนก่อนส่ง
+                RequestBody requestBody = new FormEncodingBuilder()
+                        .add("isAdd", "true")
+                        .add("Name", nameString)
+                        .add("Phone", phoneString)
+                        .add("User", userString)
+                        .add("Password", passwordString)
+                        .add("Image", urlImage + imageNameString)
+                        .build();
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(params[0]).post(requestBody).build();
+                Response response = okHttpClient.newCall(request).execute();
+
+                return response.body().string();
+
+            } catch (Exception e) {
+                Log.d("13novV1", "e doIn===>" + e.toString());
+                return null;
+            }
+
+
+        } //doInBack ทำงงานอยู้เบื้องหลังพยายามต่อเน็ต
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            Log.d("13novV1", "Result ==>" + s);
+
+
+        } //onPost
+
+    } // AddNewUser Class
+
 
     private void uploadImageToServer() {
 
