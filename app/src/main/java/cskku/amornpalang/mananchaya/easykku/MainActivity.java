@@ -9,10 +9,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,20 +53,14 @@ public class MainActivity extends AppCompatActivity {
                 passwordString = passwordEditText.getText().toString().trim();
 
                 // Check Space
-                if (userString.equals("")) {
+                if (userString.equals("") ||(passwordString.equals(""))) {
                     //Have Space
                     MyAlert myAlert = new MyAlert(MainActivity.this, R.drawable.doremon48,
                             getResources().getString(R.string.title_UserFalse),
                             getResources().getString(R.string.message_UserFalse));
                     myAlert.myDialog();
 
-                } else if (passwordString.equals("")) {
-                    //Have Space
-                    MyAlert myAlert = new MyAlert(MainActivity.this, R.drawable.doremon48,
-                            getResources().getString(R.string.title_PassFalse),
-                            getResources().getString(R.string.message_PassFalse));
-                    myAlert.myDialog();
-                } else {
+                }else {
                     //No Space
                     SynUser synUser = new SynUser(MainActivity.this);
                     synUser.execute(myConstant.getUrlGetJSON());
@@ -88,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
 
         //Explicit
         private Context context;
+        private String[] nameStrings,phoneStrings,imageStrings;
+        private String truePassword;
+        private Boolean aBoolean = true;
+
 
         public SynUser(Context context) {
             this.context = context;
@@ -117,6 +119,53 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             Log.d("13novV2", "JSON ==>" + s);
+            try {
+                JSONArray jsonArray = new JSONArray(s);
+
+                nameStrings = new String[jsonArray.length()];
+                phoneStrings = new String[jsonArray.length()];
+                imageStrings = new String[jsonArray.length()];
+
+                for (int i=0;i<jsonArray.length();i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    nameStrings[i] = jsonObject.getString("Name");
+                    phoneStrings[i] = jsonObject.getString("Phone");
+                    imageStrings[i] = jsonObject.getString("Image");
+
+                    Log.d("13novV3", "name{" + i + "} ==>" + nameStrings[i]);
+
+
+                    //Check User
+                    if (userString.equals(jsonObject.getString("User"))) {
+                        aBoolean = false;
+                        truePassword = jsonObject.getString("Password");
+                    }
+
+                } //For
+
+                if (aBoolean) {
+                    //User false
+                    MyAlert myAlert = new MyAlert(context, R.drawable.bird48,
+                            getResources().getString(R.string.title_UserFalse),
+                            getResources().getString(R.string.message_UserFalse));
+
+                } else if (passwordString.equals(truePassword)) {
+                    //Password true
+                    Toast.makeText(context,"Welcome",Toast.LENGTH_SHORT).show();
+                } else {
+                    //Password False
+                    MyAlert myAlert = new MyAlert(context, R.drawable.bird48,
+                            getResources().getString(R.string.title_PassFalse),
+                            getResources().getString(R.string.message_PassFalse));
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+
         } // onPost
 
     }// Syn User
